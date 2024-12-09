@@ -11,11 +11,6 @@ import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
 import wandb
-from packaging import version
-from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
-from torch.distributed.fsdp import ShardingStrategy
-from torch.nn.parallel import DistributedDataParallel as DDP
-
 from olmo.config import (
     CheckpointType,
     DDPGradSyncMode,
@@ -45,6 +40,10 @@ from olmo.util import (
     log_extra_field,
     prepare_cli_environment,
 )
+from packaging import version
+from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
+from torch.distributed.fsdp import ShardingStrategy
+from torch.nn.parallel import DistributedDataParallel as DDP
 
 log = logging.getLogger("train")
 
@@ -103,11 +102,12 @@ def main(cfg: TrainConfig) -> None:
     barrier()
 
     # Maybe start W&B run.
+    print(cfg.wandb)
     if cfg.wandb is not None and (get_global_rank() == 0 or not cfg.wandb.rank_zero_only):
         wandb_dir = Path(cfg.save_folder) / "wandb"
         wandb_dir.mkdir(parents=True, exist_ok=True)
         wandb.init(
-            dir=wandb_dir,
+            dir=str(wandb_dir),
             project=cfg.wandb.project,
             entity=cfg.wandb.entity,
             group=cfg.wandb.group,

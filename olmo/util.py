@@ -25,13 +25,12 @@ from botocore.config import Config
 from cached_path.schemes import SchemeClient, add_scheme_client
 from google.api_core.retry import Retry as GCSRetry
 from google.api_core.retry import if_transient_error as gcs_is_transient_error
+from olmo_data.data import get_data_path
 from rich.console import Console, ConsoleRenderable
 from rich.highlighter import NullHighlighter
 from rich.progress import Progress
 from rich.text import Text
 from rich.traceback import Traceback
-
-from olmo_data.data import get_data_path
 
 from .aliases import PathOrStr
 from .exceptions import (
@@ -698,6 +697,8 @@ def _http_file_size(scheme: str, host_name: str, path: str) -> int:
     import requests
 
     response = requests.head(f"{scheme}://{host_name}/{path}", allow_redirects=True)
+    if response.status_code == 404:
+        return 0
     return int(response.headers.get("content-length"))
 
 
