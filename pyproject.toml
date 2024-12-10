@@ -10,11 +10,11 @@ description = "Open Language Model (OLMo)"
 authors = [
     { name = "Allen Institute for Artificial Intelligence", email = "olmo@allenai.org" }
 ]
-requires-python = ">=3.8"
+requires-python = "==3.11.*"
 license = { file = "LICENSE" }
 dependencies = [
     "numpy<2",
-    "torch>=2.3",
+    "torch>2.3.0",
     "ai2-olmo-core==0.1.0",
     "omegaconf",
     "rich",
@@ -25,6 +25,7 @@ dependencies = [
     "cached_path>=1.6.2",
     "transformers",
     "importlib_resources",
+    "scikit-learn",
 ]
 
 [project.optional-dependencies]
